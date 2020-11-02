@@ -62,9 +62,8 @@ namespace Isasask.Controllers
 
         public JsonResult GetProductsPriceById(int Id)
         {
-            var product = _context.Products.Where(p => p.Id == Id).FirstOrDefault();
-            var productPrice = product.Price;
-            return Json(productPrice);
+            var currentPrice = _context.Products.Where(p => p.Id == Id).FirstOrDefault().Price;
+            return Json(currentPrice); 
         }
         public IActionResult Privacy()
         {

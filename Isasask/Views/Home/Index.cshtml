@@ -62,7 +62,7 @@
             </th>
             <th>
                 <div class="form-group">
-                    <input asp-for="Product.Price" class="form-control" readonly />
+                    <input id="ProductPrice" asp-for="Product.Price" class="form-control" readonly />
                     <span asp-validation-for="Product.Price" class="text-danger"></span>
                 </div>
             </th>
@@ -92,6 +92,20 @@
                     items += "<option value='" + row.value + "'>" + row.text + "</option> ";
                 });
                 $("#productId").html(items);
+            })
+        })
+    })
+
+    $(function () {
+        $("#productId").change(function () {
+            var url = '@Url.Content("~/")' + "Home/GetProductsPriceById";
+            var ddlSource = "#productId";
+            $.getJSON(url, { id: $(ddlSource).val() }, function (data) {
+                var items = '';
+                $("#ProductPrice").empty();
+               
+                    $("#ProductPrice").val(data);
+                               
             })
         })
     })
