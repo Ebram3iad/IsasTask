@@ -1,0 +1,98 @@
+﻿@model Isasask.ViewModel.OrderViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">الطلبات</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="text-right col-md-3">
+        <label></label>
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@Model.Order.OrderDate" class="control-label"></label>
+                <input type="date" asp-for="@Model.Order.OrderDate" class="form-control" />
+                <span asp-validation-for="@Model.Order.OrderDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Order.OrderNumber" class="control-label"></label>
+                <input asp-for="@Model.Order.OrderNumber" class="form-control" />
+                <span asp-validation-for="@Model.Order.OrderNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model.Order.ClientName" class="control-label"></label>
+                <input asp-for="@Model.Order.ClientName" class="form-control" />
+                <span asp-validation-for="@Model.Order.ClientName" class="text-danger"></span>
+            </div>
+        </form>
+
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>نوع الصنف</th>
+                <th>اسم الصنف</th>
+                <th>السعر </th>
+                <th>الكمية</th>
+            </tr>
+        </thead>
+        <tr>
+            <th>
+                <div class="form-group">
+
+                    <select id="CategoryId" class="form-control" name="categoryList" asp-for="Category.Id" asp-items="@(new SelectList(ViewBag.Categories,"Id","Name"))">
+                        <option> أختر أسم الصنف</option>
+                    </select>
+                    <span asp-validation-for="@Model.Order.ClientName" class="text-danger"></span>
+                </div>
+            </th>
+            <th>
+                <div class="form-group">
+                    <select id="productId" class="form-control" name="ProductList" asp-for="Product.Id" asp-items="@(new SelectList(string.Empty,"Id","Name"))">
+                    </select>
+                    <span asp-validation-for="@Model.Order.ClientName" class="text-danger"></span>
+                </div>
+            </th>
+            <th>
+                <div class="form-group">
+                    <input asp-for="Product.Price" class="form-control" />
+                    <span asp-validation-for="Product.Price" class="text-danger"></span>
+                </div>
+            </th>
+            <th>
+                <div class="form-group">
+                    <input asp-for="@Model.Quantity" class="form-control" />
+                    <span asp-validation-for="@Model.Quantity" class="text-danger"></span>
+                </div>
+            </th>
+
+        </tr>
+    </table>
+
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<script>
+    $(function () {
+        $("#CategoryId").change(function () {
+            var url = '@Url.Content("~/")' + "Home/GetProductsById";
+            var ddlSource = "#CategoryId";
+            $.getJSON(url, { id: $(ddlSource).val() }, function (data) {
+                var items = '';
+                $("#productId").empty();
+                $.each(data, function (i, row) {
+                    items += "<option value='" + row.value + "'>" + row.text + "</option> ";
+                });
+                $("#productId").html(items);
+            })
+        })
+    })
+</script>
